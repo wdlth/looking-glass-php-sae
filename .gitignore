@@ -6,3 +6,5 @@
 */cache/!.htaccess
 */.svn/*
 */.settings/*
+*/.buildpath
+*/.project
