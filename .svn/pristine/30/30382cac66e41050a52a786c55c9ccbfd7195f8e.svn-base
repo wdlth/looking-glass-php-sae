@@ -1,0 +1,138 @@
+name: lookingglass
+version: 1
+handle:
+- compress:  if ( out_header["Content-type"]=="text/css" ) compress
+- compress:  if ( out_header["Content-type"]=="text/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="application/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="text/plain" ) compress
+- rewrite: if(!is_dir() && !is_file() && path ~ "/") goto "/index.php?%{QUERY_STRING}"
+
+cron:
+	- description: OneAsiaHost到中国电信
+	url: /collect/oneasiahost_ct
+	schedule: every 30 mins
+	
+	- description: OneAsiaHost到中国联通
+	url: /collect/oneasiahost_cu
+	schedule: every 30 mins
+	
+	- description: OneAsiaHost到中国移动
+	url: /collect/oneasiahost_cmcc
+	schedule: every 30 mins
+	
+	- description: PCCW到中国电信
+	url: /collect/pccw_ct
+	schedule: every 30 mins
+	
+	- description: PCCW到中国联通
+	url: /collect/pccw_cu
+	schedule: every 30 mins
+	
+	- description: Peer1到中国电信
+	url: /collect/peer1_ct
+	schedule: every 30 mins
+	
+	- description: Peer1到中国联通
+	url: /collect/peer1_cu
+	schedule: every 30 mins
+	
+	- description: Peer1到中国移动
+	url: /collect/peer1_cmcc
+	schedule: every 30 mins
+
+	- description: 新力讯到中国电信
+	url: /collect/sunnyvision_ct
+	schedule: every 30 mins
+
+	- description: 新力讯到中国联通
+	url: /collect/sunnyvision_cu
+	schedule: every 30 mins
+
+	- description: 新力讯到中国移动
+	url: /collect/sunnyvision_cmcc
+	schedule: every 30 mins
+	
+	- description: KDDI到中国电信
+	url: /collect/kddi_ct
+	schedule: every 30 mins
+
+	- description: KDDI到中国联通
+	url: /collect/kddi_cu
+	schedule: every 30 mins
+
+	- description: KDDI到中国移动
+	url: /collect/kddi_cmcc
+	schedule: every 30 mins
+	
+	- description: 樱花到中国电信
+	url: /collect/sakura_ct
+	schedule: every 30 mins
+
+	- description: 樱花到中国联通
+	url: /collect/sakura_cu
+	schedule: every 30 mins
+
+	- description: 樱花到中国移动
+	url: /collect/sakura_cmcc
+	schedule: every 30 mins
+	
+	- description: ServerCentral到中国电信
+	url: /collect/servercentral_ct
+	schedule: every 30 mins
+	
+	- description: ServerCentral到中国联通
+	url: /collect/servercentral_cu
+	schedule: every 30 mins
+
+	- description: ServerCentral到中国移动
+	url: /collect/servercentral_cmcc
+	schedule: every 30 mins
+	
+	- description: Krypt到中国电信
+	url: /collect/vpls_ct
+	schedule: every 30 mins
+
+	- description: Krypt到中国联通
+	url: /collect/vpls_cu
+	schedule: every 30 mins
+
+	- description: Krypt到中国移动
+	url: /collect/vpls_cmcc
+	schedule: every 30 mins
+	
+	- description: VR HK到中国电信
+	url: /collect/vr_ct
+	schedule: every 30 mins
+
+	- description: VR HK到中国联通
+	url: /collect/vr_cu
+	schedule: every 30 mins
+
+	- description: VR HK到中国移动
+	url: /collect/vr_cmcc
+	schedule: every 30 mins
+	
+	- description: EGI到中国电信
+	url: /collect/egihosting_ct
+	schedule: every 30 mins
+
+	- description: EGI到中国联通
+	url: /collect/egihosting_cu
+	schedule: every 30 mins
+
+	- description: EGI到中国移动
+	url: /collect/egihosting_cmcc
+	schedule: every 30 mins
+	
+	- description: MC到中国电信
+	url: /collect/multacom_ct
+	schedule: every 30 mins
+
+	- description: MC到中国联通
+	url: /collect/multacom_cu
+	schedule: every 30 mins
+
+	- description: MC到中国移动
+	url: /collect/multacom_cmcc
+	schedule: every 30 mins
+	

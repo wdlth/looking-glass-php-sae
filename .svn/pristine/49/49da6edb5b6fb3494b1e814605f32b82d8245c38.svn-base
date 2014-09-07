@@ -1,0 +1,72 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+define("URL_ABOVENET", "http://lg.zayo.com/lg.cgi");
+define("REFERER_ABOVENET", "http://lg.zayo.com/lg.cgi");
+define("URL_GBLX", "http://ipstats.globalcrossing.net/cgi-bin/lg/lg.cgi");
+define("REFERER_GBLX", "http://ipstats.globalcrossing.net/cgi-bin/lg/lg.cgi");
+define("URL_LEVEL3", "http://lookingglass.level3.net/ping/lg_ping_output.php");
+define("REFERER_LEVEL3", "http://lookingglass.level3.net/ping/lg_ping_main.php");
+
+class Wordlist {
+	
+	public function abovenet($args, $ip)
+	{
+		
+		switch ($args)
+		{
+			case "url":
+				return URL_ABOVENET;
+				break;
+			case "ref":
+				return REFERER_ABOVENET;
+				break;
+			case "post":
+				return "query=ping&protocol=IPv4&addr=" . $ip . "&prefix=32&router=Los+Angeles%2C+CA";
+				break;
+			default:
+				return NULL;
+				break;
+		}
+	}
+	
+	public function globalcrossing($args, $ip)
+	{
+	
+		switch ($args)
+		{
+			case "url":
+				return URL_GBLX;
+				break;
+			case "ref":
+				return REFERER_GBLX;
+				break;
+			case "post":
+				return "lgCall=r2hping&source=118724&destAddress=" . $ip;
+				break;
+			default:
+				return NULL;
+				break;
+		}
+	}
+	
+	public function level3($args, $ip)
+	{
+	
+		switch ($args)
+		{
+			case "url":
+				return URL_LEVEL3;
+				break;
+			case "ref":
+				return REFERER_LEVEL3;
+				break;
+			case "post":
+				return "sitename=car1.lax1&address=" . $ip . "&size=64&count=5";
+				break;
+			default:
+				return NULL;
+				break;
+		}
+	}
+	
+}

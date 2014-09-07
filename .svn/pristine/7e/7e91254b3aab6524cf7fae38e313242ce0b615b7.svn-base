@@ -1,0 +1,48 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+define('ALIDNS', '223.5.5.5');
+define('CNNIC', '1.2.4.8');
+define('CERDNS', '202.112.0.35');
+define('CMCCDNS', '211.136.17.105');
+define('CTDNS', '202.96.128.68');
+define('CTBACKBONE', '202.97.0.6');
+define('CUDNS', '202.102.128.68');
+
+
+class Iplist {
+	
+	public function alidns()
+	{
+		return ALIDNS;
+	}
+	
+	public function cnnic()
+	{
+		return CNNIC;
+	}
+	
+	public function cerdns()
+	{
+		return CERDNS;
+	}
+	
+	public function cmccdns()
+	{
+		return CMCCDNS;
+	}
+	
+	public function ctdns()
+	{
+		return CTDNS;
+	}
+	
+	public function ctbackbone()
+	{
+		return CTBACKBONE;
+	}
+	
+	public function cudns()
+	{
+		return CUDNS;
+	}
+}

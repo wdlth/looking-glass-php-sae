@@ -1,0 +1,34 @@
+<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Dblib Class
+ *
+ * @package		LookingGlassSAE
+ * @subpackage	Libraries
+ * @category	Library
+ * @author		WDLTH
+ * @link		http://www.wdlth.com/
+ */
+
+class Dblib {
+	
+	public function saveping($source, $destination, $min, $avg, $max, $loss)
+	{
+		$mysql = new SaeMysql();
+		
+		$sql = "INSERT INTO `ping` (`source`, `destination`, `min`, `avg`, `max`, `loss`, `time`)" .
+				" VALUES ('" . $mysql->escape($source) . "', '" . $mysql->escape($destination) ."', " .
+				$min . ", " . $avg . ", " . $max . ", " . $loss . ", NOW()";
+		
+		$mysql -> runSql($sql);
+		if( $mysql->errno() != 0 )
+		{
+			log_message('error', "MySQL Error: " . $mysql->errmsg());
+			//die( "Error: " . $mysql->errmsg() );
+			die($sql);
+		}
+		
+		$mysql->closeDb();
+	}
+	
+}

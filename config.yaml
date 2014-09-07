@@ -1,0 +1,22 @@
+name: lookingglass
+version: 1
+handle:
+- compress:  if ( out_header["Content-type"]=="text/css" ) compress
+- compress:  if ( out_header["Content-type"]=="text/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="application/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="text/plain" ) compress
+- rewrite: if(!is_dir() && !is_file() && path ~ "/") goto "/index.php?%{QUERY_STRING}"
+
+cron:
+	- description: OneAsiaHost三合一
+	url: /collect/oneasiahost_ct
+	schedule: every 30 mins
+	
+	- description: PCCW三合一
+	url: /collect/pccw
+	schedule: every 30 mins
+	
+	- description: VR HK三合一
+	url: /collect/vr
+	schedule: every 30 mins
+	

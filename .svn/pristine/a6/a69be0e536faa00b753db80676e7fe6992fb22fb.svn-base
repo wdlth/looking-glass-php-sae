@@ -1,0 +1,7 @@
+<?php
+
+interface Ilookingglass
+{
+	public function getPingResult($source, $destination);
+	public function getTraceResult($source, $destination);
+}

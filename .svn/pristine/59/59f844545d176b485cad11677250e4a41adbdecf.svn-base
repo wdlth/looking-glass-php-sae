@@ -1,0 +1,23 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Parselib Class
+ *
+ * @package		LookingGlassSAE
+ * @subpackage	Libraries
+ * @category	Library
+ * @author		WDLTH
+ * @link		http://www.wdlth.com/
+ */
+
+class Parselib {
+	
+	public function parseping($data)
+	{
+		$arr = explode("\n",$data);
+		$arr = array_filter($arr);
+		$arr = array_values($arr);
+		
+		return array_slice($arr, -2, 1);
+	}
+}

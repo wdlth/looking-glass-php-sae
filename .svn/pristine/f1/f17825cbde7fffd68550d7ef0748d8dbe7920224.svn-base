@@ -1,0 +1,224 @@
+<?php
+
+if (! defined ( 'BASEPATH' ))
+	exit ( 'No direct script access allowed' );
+
+/**
+ * Chart Class
+ *
+ * @package LookingGlassSAE
+ * @subpackage Controllers
+ * @category Controller
+ * @author WDLTH
+ * @link http://www.wdlth.com/
+ */
+class Chart extends CI_Controller {
+	function __construct() {
+		parent::__construct ();
+	}
+	public function index() {
+		exit ( '403 Forbidden.' );
+	}
+	public function telecom() {
+		
+		$CI =& get_instance();
+		$CI->load->driver('cache');
+		
+		$xml = NULL;
+		$formattedXML = NULL;
+		
+		if($CI->cache->memcached->get('TelecomChartData') == "")
+		{
+			$timelinearr = array ();
+			$n = 1;
+			if (intval ( date ( "i" ) ) > 35 || intval ( date ( "i" ) ) <= 15) {
+				while ( $n <= 12 ) {
+					$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+					$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+					$n = $n + 2;
+				}
+			} else {
+				while ( $n <= 12 ) {
+					$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+					$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+					$n = $n + 2;
+				}
+			}
+			$timelinearr = array_reverse ( $timelinearr );
+			
+			$xml = new SimpleXMLElement ( '<chart/>' );
+			$categories = $xml->addChild ( 'categories' );
+			for($j = 0; $j < count ( $timelinearr ); $j ++) {
+				$categories->addChild ( 'item', $timelinearr [$j] );
+			}
+			
+			$this->load->library ( 'Dblib' );
+			$sourcearr = $this->dblib->getChartSource ();
+			foreach ( $sourcearr as $source ) {
+				$series = $xml->addChild ( 'series' );
+				$series->addChild ( 'name', $source ["source"] );
+				$data = $series->addChild ( 'data' );
+				$pointarr = $this->dblib->getChartPoint ( $source ["source"], 'ChinaTelecom' );
+				for($l = 0; $l < 12; $l ++) {
+					$data->addChild ( 'point', intval ( $pointarr [$l] ["avg"] ) );
+				}
+				for($l = 0; $l < 12; $l ++) {
+					$data->addChild ( 'loss', intval ( $pointarr [$l] ["loss"] ) );
+				}
+			}
+			
+			$CI->cache->memcached->save('TelecomChartData', $xml->asXML(), 5);
+			log_message('notice', "Saved \"TelecomChartData\" to memcached");
+			
+			$dom = new DOMDocument ();
+			$dom->loadXML ( $xml->asXML() );
+			$dom->formatOutput = TRUE;
+			$formattedXML = $dom->saveXML ();
+		}else{
+			$xml = $CI->cache->memcached->get('TelecomChartData');
+			log_message('notice', "Loaded \"TelecomChartData\" from memcached");
+			
+			$dom = new DOMDocument ();
+			$dom->loadXML ( $xml );
+			$dom->formatOutput = TRUE;
+			$formattedXML = $dom->saveXML ();			
+		}
+		
+		header ( 'Content-type: text/xml' );
+		echo $formattedXML;
+	}
+	
+	public function unicom() {
+		$timelinearr = array ();
+		$n = 1;
+		if (intval ( date ( "i" ) ) > 35 || intval ( date ( "i" ) ) <= 15) {
+			while ( $n <= 12 ) {
+				$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+				$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+				$n = $n + 2;
+			}
+		} else {
+			while ( $n <= 12 ) {
+				$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+				$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+				$n = $n + 2;
+			}
+		}
+		$timelinearr = array_reverse ( $timelinearr );
+		
+		$xml = new SimpleXMLElement ( '<chart/>' );
+		$categories = $xml->addChild ( 'categories' );
+		for($j = 0; $j < count ( $timelinearr ); $j ++) {
+			$categories->addChild ( 'item', $timelinearr [$j] );
+		}
+		
+		$this->load->library ( 'Dblib' );
+		$sourcearr = $this->dblib->getChartSource ();
+		foreach ( $sourcearr as $source ) {
+			$series = $xml->addChild ( 'series' );
+			$series->addChild ( 'name', $source ["source"] );
+			$data = $series->addChild ( 'data' );
+			$pointarr = $this->dblib->getChartPoint ( $source ["source"], 'ChinaUnicom' );
+			for($l = 0; $l < 12; $l ++) {
+				$data->addChild ( 'point', intval ( $pointarr [$l] ["avg"] ) );
+			}
+			for($l = 0; $l < 12; $l ++) {
+				$data->addChild ( 'loss', intval ( $pointarr [$l] ["loss"] ) );
+			}
+		}
+		header ( 'Content-type: text/xml' );
+		$dom = new DOMDocument ();
+		$dom->loadXML ( $xml->asXML () );
+		$dom->formatOutput = TRUE;
+		$formattedXML = $dom->saveXML ();
+		echo $formattedXML;
+	}
+	
+	public function mobile() {
+		$timelinearr = array ();
+		$n = 1;
+		if (intval ( date ( "i" ) ) > 35 || intval ( date ( "i" ) ) <= 15) {
+			while ( $n <= 12 ) {
+				$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+				$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+				$n = $n + 2;
+			}
+		} else {
+			while ( $n <= 12 ) {
+				$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+				$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+				$n = $n + 2;
+			}
+		}
+		$timelinearr = array_reverse ( $timelinearr );
+		
+		$xml = new SimpleXMLElement ( '<chart/>' );
+		$categories = $xml->addChild ( 'categories' );
+		for($j = 0; $j < count ( $timelinearr ); $j ++) {
+			$categories->addChild ( 'item', $timelinearr [$j] );
+		}
+		
+		$this->load->library ( 'Dblib' );
+		$sourcearr = $this->dblib->getChartSource ();
+		foreach ( $sourcearr as $source ) {
+			$series = $xml->addChild ( 'series' );
+			$series->addChild ( 'name', $source ["source"] );
+			$data = $series->addChild ( 'data' );
+			$pointarr = $this->dblib->getChartPoint ( $source ["source"], 'ChinaMobile' );
+			for($l = 0; $l < 12; $l ++) {
+				$data->addChild ( 'point', intval ( $pointarr [$l] ["avg"] ) );
+			}
+			for($l = 0; $l < 12; $l ++) {
+				$data->addChild ( 'loss', intval ( $pointarr [$l] ["loss"] ) );
+			}
+		}
+		header ( 'Content-type: text/xml' );
+		$dom = new DOMDocument ();
+		$dom->loadXML ( $xml->asXML () );
+		$dom->formatOutput = TRUE;
+		$formattedXML = $dom->saveXML ();
+		echo $formattedXML;
+	}
+	public function point() {
+		$this->load->library ( 'Dblib' );
+		$sourcearr = $this->dblib->getChartSource ();
+		$xml = new SimpleXMLElement ( '<chart/>' );
+		foreach ( $sourcearr as $source ) {
+			$series = $xml->addChild ( 'series' );
+			$series->addChild ( 'name', $source ["source"] );
+			$data = $series->addChild ( 'data' );
+			$pointarr = $this->dblib->getChartPoint ( $source ["source"], 'ChinaTelecom' );
+			for($l = 0; $l < 12; $l ++) {
+				$data->addChild ( 'point', intval ( $pointarr [$l] ["avg"] ) );
+			}
+		}
+		header ( 'Content-type: text/xml' );
+		echo $xml->asXML ();
+	}
+	public function timeline() {
+		$timelinearr = array ();
+		$n = 1;
+		if (intval ( date ( "i" ) ) > 35 || intval ( date ( "i" ) ) <= 15) {
+			while ( $n <= 12 ) {
+				$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+				$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+				$n = $n + 2;
+			}
+		} else {
+			while ( $n <= 12 ) {
+				$timelinearr [$n] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":00";
+				$timelinearr [$n + 1] = date ( "H", strtotime ( "-" . 30 * $n . " minutes" ) ) . ":30";
+				$n = $n + 2;
+			}
+		}
+		$timelinearr = array_reverse ( $timelinearr );
+		
+		$xml = new SimpleXMLElement ( '<chart/>' );
+		$categories = $xml->addChild ( 'categories' );
+		for($j = 0; $j < count ( $timelinearr ); $j ++) {
+			$categories->addChild ( 'item', $timelinearr [$j] );
+		}
+		header ( 'Content-type: text/xml' );
+		echo $xml->asXML ();
+	}
+}

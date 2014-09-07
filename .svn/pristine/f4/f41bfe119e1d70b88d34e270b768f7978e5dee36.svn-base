@@ -1,0 +1,45 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Chart Class
+ *
+ * @package		LookingGlassSAE
+ * @subpackage	Controllers
+ * @category	Controller
+ * @author		WDLTH
+ * @link		http://www.wdlth.com/
+ */
+
+class Chart extends CI_Controller {
+
+	function __construct() {
+		parent::__construct();
+	}
+	
+	public function index()
+	{
+		exit('403 Forbidden.');
+	}
+	
+	public function timeline()
+	{
+		$timelinearr = array();
+		for($i = 0; $i < 12; $i++)
+		{
+			$timelinearr[$i] = date("H", strtotime("-" . $i . " hours")) . ":00";
+		}
+		
+		$config = array (
+				'root'    => 'root',
+				'element' => 'element',
+				'newline' => "\n",
+				'tab'     => "\t"
+		);
+		
+		$this->load->dbutil();
+		$xml = $this->dbutil->xml_from_result(array_reverse($timelinearr), $config);
+		header('Content-type: text/xml');
+		echo $xml;
+	}
+
+}

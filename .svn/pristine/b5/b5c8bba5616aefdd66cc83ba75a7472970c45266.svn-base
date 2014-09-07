@@ -1,0 +1,28 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+define("URL_ABOVENET", "http://lg.zayo.com/lg.cgi");
+define("REFERER_ABOVENET", "http://lg.zayo.com/lg.cgi");
+
+class Wordlist {
+	
+	public function abovenet($args, $ip)
+	{
+		
+		switch ($args)
+		{
+			case "url":
+				return URL_ABOVENET;
+				break;
+			case "ref":
+				return REFERER_ABOVENET;
+				break;
+			case "post":
+				return "query=ping&protocol=IPv4&addr=" . $ip . "&prefix=32&router=Los+Angeles%2C+CA";
+				break;
+			default:
+				return NULL;
+				break;
+		}
+	}
+	
+}

@@ -1,0 +1,9 @@
+name: lookingglass
+version: 1
+handle:
+- compress:  if ( out_header["Content-type"]=="text/css" ) compress
+- compress:  if ( out_header["Content-type"]=="text/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="application/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="text/plain" ) compress
+- rewrite: if(!is_dir() && !is_file() && path ~ "/") goto "/index.php?%{QUERY_STRING}"
+	

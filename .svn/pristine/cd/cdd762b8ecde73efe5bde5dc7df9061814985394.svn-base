@@ -1,0 +1,19 @@
+<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+define("TOKEN", "LookingGlassWeChatToken20140418");
+
+/**
+ * Weixinlib Class
+ *
+ * @package		LookingGlassSAE
+ * @subpackage	Libraries
+ * @category	Library
+ * @author		WDLTH
+ * @link		http://www.wdlth.com/
+ */
+
+class Weixinlib {
+	
+}
+
+?>

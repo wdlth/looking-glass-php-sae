@@ -1,0 +1,122 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Parselib Class
+ *
+ * @package		LookingGlassSAE
+ * @subpackage	Libraries
+ * @category	Library
+ * @author		WDLTH
+ * @link		http://www.wdlth.com/
+ */
+
+class Parselib {
+	
+	public function parseping($data)
+	{
+		$resultarr = array(); 
+				
+		$arr = explode("\n",$data);
+		$arr = array_filter($arr);
+		$arr = array_values($arr);
+		
+		preg_match("/([0-9]+|[0-9]+\.[0-9]+)% packet loss/i", $arr[count($arr) - 2], $lossmatches);
+		preg_match("/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\ ms/i", $arr[count($arr) - 1], $delaymatches);
+		$resultarr["min"] = floor($delaymatches[1]);
+		$resultarr["avg"] = floor($delaymatches[2]);
+		$resultarr["max"] = floor($delaymatches[3]);
+		$resultarr["loss"] = floor($lossmatches[1]);
+		
+		return $resultarr;
+	}
+	
+	public function parsegblx($data)
+	{
+		$resultarr = array();
+	
+		$arr = explode("<br>",$data);
+		$arr = array_filter($arr);
+		$arr = array_values($arr);
+	
+		/*preg_match("/([0-9]+)% packet loss/i", $arr[count($arr) - 3], $lossmatches);
+		preg_match("/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\ ms/i", $arr[count($arr) - 2], $delaymatches);
+		$resultarr["min"] = floor($delaymatches[1]);
+		$resultarr["avg"] = floor($delaymatches[2]);
+		$resultarr["max"] = floor($delaymatches[4]);
+		$resultarr["loss"] = $lossmatches[1];*/
+	
+		return $arr;
+	}
+	
+	public function parselevel3($data)
+	{
+		$resultarr = array();
+	
+		$arr = explode("<br>",$data);
+		$arr = array_filter($arr);
+		$arr = array_values($arr);
+	
+		preg_match("/([0-9]+)% packet loss/i", $arr[count($arr) - 3], $lossmatches);
+		preg_match("/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\ ms/i", $arr[count($arr) - 2], $delaymatches);
+		$resultarr["min"] = floor($delaymatches[1]);
+		$resultarr["avg"] = floor($delaymatches[2]);
+		$resultarr["max"] = floor($delaymatches[4]);
+		$resultarr["loss"] = floor($lossmatches[1]);
+	
+		return $resultarr;
+	}
+	
+	public function parseoah($data)
+	{
+		$resultarr = array();
+	
+		$arr = explode("\n",$data);
+		$arr = array_filter($arr);
+		$arr = array_values($arr);
+	
+		preg_match("/([0-9]+)% packet loss/i", $arr[count($arr) - 3], $lossmatches);
+		preg_match("/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\ ms/i", $arr[count($arr) - 2], $delaymatches);
+		$resultarr["min"] = floor($delaymatches[1]);
+		$resultarr["avg"] = floor($delaymatches[2]);
+		$resultarr["max"] = floor($delaymatches[3]);
+		$resultarr["loss"] = floor($lossmatches[1]);
+	
+		return $resultarr;
+	}
+	
+	public function parsesunnyvision($data)
+	{
+		$resultarr = array();
+	
+		$arr = explode("\n",$data);
+		$arr = array_filter($arr);
+		$arr = array_values($arr);
+	
+		//preg_match("/([0-9]+)% packet loss/i", $arr[count($arr) - 3], $lossmatches);
+		//preg_match("/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\ ms/i", $arr[count($arr) - 2], $delaymatches);
+		preg_match("/^Success\ rate\ is\ ([0-9]+)\ percent\ (.+)\ =\ ([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\/([0-9]+|[0-9]+\.[0-9]+)\ ms$/i", $arr[count($arr) - 1], $matches);
+		$resultarr["min"] = floor($matches[3]);
+		$resultarr["avg"] = floor($matches[4]);
+		$resultarr["max"] = floor($matches[5]);
+		$resultarr["loss"] = 100 - floor($matches[1]);
+	
+		return $resultarr;
+	}
+	
+	public function parsevpls($data)
+	{
+		$resultarr = array();
+		$xml = simplexml_load_string($data);
+		if($xml->statistics == NULL || $xml->statistics == "")
+		{
+			log_message('warning', "Cannot parse data from vpls.");
+			return $xml;
+		}else{
+			$resultarr["min"] = floor(floatval($xml->statistics->ttl->min));
+			$resultarr["avg"] = floor(floatval($xml->statistics->ttl->avg));
+			$resultarr["max"] = floor(floatval($xml->statistics->ttl->max));
+			$resultarr["loss"] = 100 * floor(floatval($xml->statistics->recv) / floatval($xml->statistics->send));
+		}
+		return $xml;
+	}
+}
