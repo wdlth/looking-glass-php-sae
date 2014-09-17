@@ -26,8 +26,9 @@
 <h2>Looking Glass正在收集数据和进行测试</h2>
 <h3>与BGPlay功能不同，这个工具只采集Ping数据。</h3>
 <h4>数据来自超过10个不同ISP或者机房的Looking Glass，其中有KT，很平衡。</h4>
-<h4>本程序由WDLTH编写，并于成熟时开源。</h4>
+<h4>本程序由WDLTH编写，已在GITHUB开源。<a href="https://github.com/wdlth/looking-glass-php-sae" title="项目GITHUB地址">项目GITHUB地址</a></h4>
 <h4>由于Cron满了，会对香港至移动的测试任务进行削减，反正移动和HKIX谈笑风生，延迟都是那么低……</h4>
+<h4>启用了Highcharts的放大功能，在图表上拖动可以进行放大。</h4>
 <h5>数据仅供参考。</h5>
 <br />
 <h5>以下是最新数据：</h5>
