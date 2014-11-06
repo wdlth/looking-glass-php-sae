@@ -8,7 +8,7 @@ handle:
 - rewrite: if(!is_dir() && !is_file() && path ~ "/") goto "/index.php?%{QUERY_STRING}"
 
 cron:
-	- description: OneAsiaHost三合一
+	- description: OneAsiaHost电信
 	url: /collect/oneasiahost_ct
 	schedule: every 30 mins
 	
