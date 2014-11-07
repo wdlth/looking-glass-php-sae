@@ -47,9 +47,11 @@ class Pinglib {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url . $ip);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_REFERER, $referer);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)");
 		$result = curl_exec($ch);
 		if(curl_errno($ch))
 		{
